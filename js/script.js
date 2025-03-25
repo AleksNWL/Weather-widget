@@ -38,16 +38,16 @@ async function showWeather(city) {
 
   switch(weather.hourly.weathercode[currentIndex]) {
     case(0):
-      weatherImg.src = '../img/sun.svg';
+      weatherImg.src = './img/sun.svg';
       break;
     case(1):
-      weatherImg.src = '../img/sun.svg';
+      weatherImg.src = './img/sun.svg';
       break;
     case(2):
-      weatherImg.src = '../img/partly_cloudy.svg';
+      weatherImg.src = './img/partly_cloudy.svg';
       break;
     case(3):
-      weatherImg.src = '../img/cloudy.svg';
+      weatherImg.src = './img/cloudy.svg';
       break;
     case(45):
       weatherImg.src = '../img/sun.svg';
