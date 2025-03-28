@@ -1,7 +1,6 @@
 const weatherInfo = document.querySelector('.weather-info');
 const searchInput = document.querySelector('.search-input');
 const searchButton = document.querySelector('.search-button');
-const weatherImg = weatherInfo.querySelector('.weather-img');
 const weatherCity = weatherInfo.querySelector('.weather-city');
 const weatherTemp = weatherInfo.querySelector('.weather-temperature');
 const weatherFeelTemp = weatherInfo.querySelector('.weather-feel-temp');
@@ -32,98 +31,54 @@ async function showWeather(city) {
   console.log(weather)
   let time = formatTime(weather.current_weather.time);
   const currentIndex = weather.hourly.time.findIndex(times => times === time);
-  weatherTemp.textContent = `Температура воздуха: ${weather.hourly.temperature_2m[currentIndex]}`;
-  weatherFeelTemp.textContent = `Ощущается как: ${weather.hourly.apparent_temperature[currentIndex]}`;
-  weatherWind.textContent = weather.hourly.weathercode[currentIndex];
-
-  switch(weather.hourly.weathercode[currentIndex]) {
-    case(0):
-      weatherImg.src = './img/sun.svg';
-      break;
-    case(1):
-      weatherImg.src = './img/sun.svg';
-      break;
-    case(2):
-      weatherImg.src = './img/partly_cloudy.svg';
-      break;
-    case(3):
-      weatherImg.src = './img/cloudy.svg';
-      break;
-    case(45):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(48):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(51):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(53):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(55):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(56):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(57):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(61):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(63):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(65):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(66):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(67):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(71):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(73):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(75):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(77):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(80):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(81):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(82):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(85):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(86):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(95):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(96):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    case(99):
-      weatherImg.src = '../img/sun.svg';
-      break;
-    default:
-      console.log('Такой погоды пока что нет ;(');
+  weatherTemp.textContent = `Температура воздуха: ${Math.round(weather.hourly.temperature_2m[currentIndex])}°C`;
+  weatherFeelTemp.textContent = `Ощущается как: ${Math.round(weather.hourly.apparent_temperature[currentIndex])}°C`;
+  
+  const existingImg = weatherInfo.querySelector('img');
+  if (existingImg) {
+    existingImg.remove();
   }
+
+  const imgElement = document.createElement('img');
+  imgElement.alt = "weather-image";
+  imgElement.src = getWeatherIcon(weather.hourly.weathercode[currentIndex]);
+  imgElement.width = "80";
+
+  weatherInfo.insertBefore(imgElement, weatherInfo.firstChild)
+}
+
+function getWeatherIcon(code) {
+  const weatherIcons = {
+    0: './img/sun.svg',
+    1: './img/mainly_clear.svg',
+    2: './img/partly_cloudy.svg',
+    3: './img/overcast.svg',
+    45: './img/fog.svg',
+    48: './img/fog.svg',
+    51: './img/drizzle_light.svg',
+    53: './img/drizzle_moderate.svg',
+    55: './img/drizzle_dense_intensity.svg',
+    56: './img/freezing_drizzle.svg',
+    57: './img/freezing_drizzle.svg',
+    61: './img/rain_slight.svg',
+    63: './img/rain_moderate.svg',
+    65: './img/rain_heavy_intensity.svg',
+    66: './img/freezing_rain.svg',
+    67: './img/freezing_rain.svg',
+    71: './img/snow_fall_slight.svg',
+    73: './img/snow_fall_moderate.svg',
+    75: './img/snow_fall_heavy_intensity.svg',
+    77: './img/snow_fall_heavy_intensity.svg',
+    80: './img/rain_slight.svg',
+    81: './img/rain_moderate.svg',
+    82: './img/rain_heavy_intensity.svg',
+    85: './img/snow_fall_moderate.svg',
+    86: './img/snow_fall_heavy_intensity.svg',
+    95: './img/thunderstorm.svg',
+    96: './img/thunderstorm_hail.svg',
+    99: './img/thunderstorm_hail.svg'
+  };
+  return weatherIcons[code] || console.log('Такой погоды пока что нет ;(');
 }
 
 function formatTime(currentTime) {
