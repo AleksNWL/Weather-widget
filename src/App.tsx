@@ -6,32 +6,33 @@ import {getWeatherData} from "./services/weather-api.ts";
 
 function App() {
     const [city, setCity] = useState<string>('');
-    const [weatherInfo, setWeatherInfo] = useState<any>(null);
+    const [weatherState, setWeatherState] = useState<any>(null);
     const [weatherImg, setWeatherImg] = useState<string>('');
-    const [temp, setTemp] = useState<string>('');
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCity(e.target.value);
     }
 
-    const handleClick = async () => {
-        try {
-            const cityData = await weatherCity(city);
-            console.log(cityData);
-            if (cityData) {
-                const weatherData = await getWeatherData(cityData);
-                setWeatherInfo(weatherData);
-                setTimeCity(weatherData);
-                console.log(weatherData.hourly.temperature_2m);
-            }
-        } catch (error) {
-            console.error(`Ошибка какой-то из API: ${error}!`);
+const handleClick = async () => {
+    try {
+        const cityData = await weatherCity(city);
+        console.log(cityData);
+        if (cityData) {
+            const weatherInfo = await getWeatherData(cityData);  // Локальная переменная
+            setWeatherState(weatherInfo);                         // Обновляем состояние
+            setTimeCity(weatherInfo);
+            console.log(weatherInfo.hourly.temperature_2m);
         }
+    } catch (error) {
+        console.error(`Ошибка какой-то из API: ${error}!`);
     }
+};
 
-    const setTimeCity = (weatherData) => {
-        console.log(weatherData.current_weather.time)
-        getWeatherIcon(weatherData.hourly.weathercode[0]);
+    
+
+    const setTimeCity = (weatherInfo: any) => {
+        console.log(weatherInfo.current_weather.time)
+        getWeatherIcon(weatherInfo.hourly.weathercode[0]);
     }
 
     function getWeatherIcon(code: number): string | undefined {
@@ -92,7 +93,7 @@ function App() {
                     src={weatherImg}
                     alt="Weather"/>
                 <div className="weather-city">{city}</div>
-                <div className="weather-feel-temp"></div>
+                <div className="weather-feel-temp">Температура: {weatherState.current_weather.temperature}°C</div>
                 <div className="weather-wind"></div>
                 <div className="weather-wet"></div>
             </div>
